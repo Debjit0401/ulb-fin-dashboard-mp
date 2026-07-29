@@ -95,6 +95,30 @@ body{font-family:'DM Sans',sans-serif;background:var(--gray50);color:var(--gray8
 .division-card .dbar{height:6px;border-radius:3px;background:var(--gray200);overflow:hidden;margin-bottom:6px}
 .division-card .dbar-fill{height:100%;background:var(--orange)}
 .division-card .dstat{font-size:11px;color:var(--gray500)}
+#sidebar-toggle{display:none;background:none;border:none;padding:6px;cursor:pointer;flex-shrink:0}
+#sidebar-toggle svg{display:block;width:22px;height:22px;stroke:#fff}
+#sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(15,23,42,.5);z-index:39}
+.outlay-grid{grid-template-columns:1fr 1fr 1fr}
+
+@media (max-width:900px){
+  #sidebar-toggle{display:block}
+  #sidebar{position:fixed;top:0;left:0;height:100vh;z-index:40;transform:translateX(-100%);transition:transform .2s ease;box-shadow:2px 0 20px rgba(0,0,0,.3)}
+  #sidebar.open{transform:translateX(0)}
+  #sidebar.open ~ #sidebar-overlay{display:block}
+  #topbar{padding:12px 16px;flex-wrap:wrap;row-gap:10px}
+  #top-tabs{padding:10px 16px;overflow-x:auto;flex-wrap:nowrap}
+  #main{padding:12px 16px 40px}
+  .kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .division-grid{grid-template-columns:repeat(auto-fill,minmax(140px,1fr))}
+  .outlay-grid{grid-template-columns:1fr!important}
+  #sync-status{margin-left:0!important;order:3;width:100%}
+}
+@media (max-width:520px){
+  .kpi-grid{grid-template-columns:1fr!important}
+  #module-switch{overflow-x:auto;max-width:100%}
+  .mod-btn{padding:0 10px;font-size:11.5px}
+  .section-card{padding:14px!important}
+}
 </style>
 </head>
 <body>
@@ -112,8 +136,13 @@ body{font-family:'DM Sans',sans-serif;background:var(--gray50);color:var(--gray8
     <div id="divisionNav"></div>
   </div>
 
+  <div id="sidebar-overlay" onclick="toggleSidebar()"></div>
+
   <div id="content-area">
     <div id="topbar">
+      <button id="sidebar-toggle" onclick="toggleSidebar()" aria-label="Toggle menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
       <div id="module-switch">
         <div class="mod-btn active" id="modBtnFin" onclick="switchModule('fin')">Financial Progress</div>
         <div class="mod-btn" id="modBtnPhy" onclick="switchModule('phy')">Physical Progress</div>
@@ -132,7 +161,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--gray50);color:var(--gray8
 
       <div class="section-card">
         <div class="section-card-title">Financial Outlay — Projects Approved by GoI</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px">
+        <div class="outlay-grid" style="display:grid;gap:14px;margin-bottom:14px">
           <div style="display:flex;flex-direction:column;gap:10px">
             <div class="kpi-card" style="border-left-color:var(--navy)">
               <div class="kpi-label">GoI</div>
@@ -607,11 +636,16 @@ function buildTopTabs() {
   ).join("");
 }
 
+function toggleSidebar() {
+  document.getElementById("sidebar").classList.toggle("open");
+}
+
 function setDivision(d) {
   currentDivision = d;
   buildDivisionNav();
   syncTableControls();
   if (currentModule === "fin") render(); else renderExp();
+  if (window.innerWidth <= 900) document.getElementById("sidebar").classList.remove("open");
 }
 
 function syncTableControls() {
