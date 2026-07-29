@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SBM(U) 2.0 — ULB Project Financial Status</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#0f1f3d;--navy2:#172544;
+  --orange:#f97316;--orange-light:#fff7ed;--orange-mid:#fb923c;
+  --green:#16a34a;--red:#dc2626;--amber:#d97706;--blue:#2563eb;
+  --gray50:#f8fafc;--gray100:#f1f5f9;--gray200:#e2e8f0;--gray300:#cbd5e1;
+  --gray400:#94a3b8;--gray500:#64748b;--gray600:#475569;--gray700:#334155;--gray800:#1e293b;
+}
+body{font-family:'DM Sans',sans-serif;background:var(--gray50);color:var(--gray800);font-size:15px}
+#app{display:flex;min-height:100vh}
+
+/* SIDEBAR */
+#sidebar{width:240px;flex-shrink:0;background:var(--navy);display:flex;flex-direction:column;padding:22px 0;overflow-y:auto}
+.sb-logo{display:flex;align-items:center;gap:10px;padding:0 20px 22px;border-bottom:1px solid rgba(255,255,255,.08);margin-bottom:14px}
+.sb-logo-box{width:38px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:var(--orange);color:#fff;font-weight:700;font-size:14px}
+.sb-logo-text{color:#fff;font-weight:600;font-size:13px;line-height:1.25}
+.sb-logo-sub{color:rgba(255,255,255,.5);font-size:10.5px;margin-top:1px}
+.sb-section-label{color:rgba(255,255,255,.35);font-size:10px;text-transform:uppercase;letter-spacing:.7px;padding:12px 20px 6px}
+.sb-nav-item{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 20px;color:rgba(255,255,255,.68);font-size:13.5px;font-weight:500;cursor:pointer;border-left:3px solid transparent;transition:.15s}
+.sb-nav-item:hover{background:rgba(255,255,255,.04);color:#fff}
+.sb-nav-item.active{background:rgba(249,115,22,.12);border-left-color:var(--orange);color:#fff}
+.sb-nav-count{font-size:11px;color:rgba(255,255,255,.4);background:rgba(255,255,255,.06);padding:1px 7px;border-radius:10px}
+.sb-nav-item.active .sb-nav-count{color:var(--orange-mid);background:rgba(249,115,22,.15)}
+.sb-search{margin:6px 16px 10px;padding:8px 10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:7px;color:#fff;font-size:12.5px;width:calc(100% - 32px);outline:none}
+.sb-search::placeholder{color:rgba(255,255,255,.35)}
+
+/* CONTENT */
+#content-area{flex:1;min-width:0;display:flex;flex-direction:column}
+#topbar{background:var(--navy2);padding:16px 32px;display:flex;align-items:center;gap:14px;border-bottom:1px solid rgba(255,255,255,.06)}
+.tb-title{color:#fff;font-weight:600;font-size:15px;line-height:1.2}
+.tb-sub{color:rgba(255,255,255,.5);font-size:11.5px;margin-top:1px}
+#sync-status{margin-left:16px;font-size:11px;color:rgba(255,255,255,.6)}
+#refresh-btn{margin-left:8px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2);color:#fff;border-radius:6px;padding:5px 12px;font-size:11px;cursor:pointer;font-family:'DM Sans',sans-serif}
+#refresh-btn:hover{background:rgba(255,255,255,.15)}
+.tb-badge{margin-left:auto;background:rgba(249,115,22,.15);color:var(--orange-mid);border:1px solid rgba(249,115,22,.4);border-radius:20px;padding:5px 14px;font-size:12px;font-weight:500}
+#module-switch{display:flex;align-items:center;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-radius:8px;padding:3px}
+.mod-btn{display:flex;align-items:center;justify-content:center;height:26px;padding:0 14px;font-size:12px;font-weight:600;color:rgba(255,255,255,.6);border-radius:6px;cursor:pointer;white-space:nowrap;transition:.15s}
+.mod-btn:hover{color:#fff}
+.mod-btn.active{background:var(--orange);color:#fff}
+
+#top-tabs{background:#fff;border-bottom:1px solid var(--gray200);padding:12px 32px;display:flex;gap:8px;flex-wrap:wrap}
+.top-tab{padding:8px 20px;font-size:13px;font-weight:600;color:var(--navy);cursor:pointer;border-radius:22px;background:var(--gray100);border:1px solid var(--gray200);transition:.15s}
+.top-tab:hover{background:#e0e9ff}
+.top-tab.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+
+#main{max-width:1440px;width:100%;margin:0 auto;padding:14px 36px 48px;flex:1}
+.page-header{margin-bottom:18px}
+.page-header h1{display:block;font-size:16px;font-weight:500;color:#fff;background:var(--navy);padding:14px 18px;border-radius:8px}
+.page-header p{font-size:13.5px;color:var(--gray500);margin-top:8px}
+
+.kpi-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin-bottom:20px}
+.kpi-card{background:#fff;border:1px solid var(--gray200);border-radius:10px;padding:16px 18px;border-left:4px solid var(--gray200);box-shadow:0 1px 2px rgba(15,31,61,.04);transition:.15s}
+.kpi-card:hover{box-shadow:0 4px 12px rgba(15,31,61,.08);transform:translateY(-1px)}
+.kpi-label{font-size:11.5px;text-transform:uppercase;letter-spacing:.4px;color:var(--gray500);margin-bottom:6px;font-weight:600}
+.kpi-value{font-size:23px;font-weight:700;color:var(--gray800);line-height:1.2;letter-spacing:-.2px}
+.kpi-sub{font-size:11.5px;color:var(--gray400);margin-top:5px}
+
+.section-card{background:#fff;border:1px solid var(--gray200);border-radius:10px;padding:18px 20px;margin-bottom:16px}
+.section-card-title{font-size:14.5px;font-weight:600;color:var(--gray700);margin-bottom:14px;display:flex;align-items:center;justify-content:space-between}
+
+.fin-table{width:100%;border-collapse:collapse}
+.fin-table th{text-align:right;font-size:11px;text-transform:uppercase;letter-spacing:.4px;color:var(--gray400);font-weight:600;padding:9px 10px;border-bottom:1px solid var(--gray200);white-space:nowrap;position:sticky;top:0;background:#fff}
+.sortable-th{cursor:pointer;user-select:none}
+.sortable-th:hover{color:var(--navy)}
+.fin-table th:first-child,.fin-table td:first-child{text-align:left}
+.fin-table th:nth-child(2),.fin-table td:nth-child(2){text-align:left}
+.fin-table td{padding:9px 10px;border-bottom:1px solid var(--gray100);font-size:13px;vertical-align:middle;text-align:right;white-space:nowrap}
+.fin-table tr:last-child td{border-bottom:none}
+.fin-table tr.total-row td{font-weight:700;background:var(--gray50);border-top:1.5px solid var(--gray300)}
+.fin-table tr:hover td{background:var(--gray50)}
+.pct-hi{color:var(--green);font-weight:600} .pct-mid{color:var(--amber);font-weight:600} .pct-lo{color:var(--red);font-weight:600}
+.table-scroll{max-height:640px;overflow:auto}
+
+.division-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-bottom:18px}
+.heat-table{border-collapse:collapse;width:100%;min-width:640px}
+.heat-table th{font-size:11px;text-transform:uppercase;letter-spacing:.4px;color:var(--gray500);font-weight:600;padding:8px 10px;text-align:center;border-bottom:1px solid var(--gray200)}
+.heat-table th:first-child{text-align:left}
+.heat-table td{padding:0;text-align:center;border:3px solid #fff}
+.heat-table td.heat-label{text-align:left;padding:10px 12px;font-size:13px;font-weight:600;color:var(--navy);border:none;white-space:nowrap}
+.heat-cell{padding:12px 10px;font-size:13px;font-weight:700;color:#fff;border-radius:6px;cursor:pointer;transition:.15s}
+.heat-cell:hover{outline:2px solid var(--navy);outline-offset:-2px}
+.heat-legend{display:flex;align-items:center;gap:8px;margin-top:12px;font-size:11px;color:var(--gray500)}
+.heat-legend-bar{width:120px;height:8px;border-radius:4px;background:linear-gradient(90deg,#dc2626,#f59e0b,#16a34a)}
+.division-card{background:#fff;border:1px solid var(--gray200);border-radius:10px;padding:12px 14px;cursor:pointer;transition:.15s}
+.division-card:hover{box-shadow:0 3px 10px rgba(0,0,0,.08)}
+.division-card .dname{font-size:13px;font-weight:600;color:var(--navy);margin-bottom:6px}
+.division-card .dbar{height:6px;border-radius:3px;background:var(--gray200);overflow:hidden;margin-bottom:6px}
+.division-card .dbar-fill{height:100%;background:var(--orange)}
+.division-card .dstat{font-size:11px;color:var(--gray500)}
+#sidebar-toggle{display:none;background:none;border:none;padding:6px;cursor:pointer;flex-shrink:0}
+#sidebar-toggle svg{display:block;width:22px;height:22px;stroke:#fff}
+#sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(15,23,42,.5);z-index:39}
+.outlay-grid{grid-template-columns:1fr 1fr 1fr}
+
+@media (max-width:900px){
+  #sidebar-toggle{display:block}
+  #sidebar{position:fixed;top:0;left:0;height:100vh;z-index:40;transform:translateX(-100%);transition:transform .2s ease;box-shadow:2px 0 20px rgba(0,0,0,.3)}
+  #sidebar.open{transform:translateX(0)}
+  #sidebar.open ~ #sidebar-overlay{display:block}
+  #topbar{padding:12px 16px;flex-wrap:wrap;row-gap:10px}
+  #top-tabs{padding:10px 16px;overflow-x:auto;flex-wrap:nowrap}
+  #main{padding:12px 16px 40px}
+  .kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .division-grid{grid-template-columns:repeat(auto-fill,minmax(140px,1fr))}
+  .outlay-grid{grid-template-columns:1fr!important}
+  #sync-status{margin-left:0!important;order:3;width:100%}
+}
+@media (max-width:520px){
+  .kpi-grid{grid-template-columns:1fr!important}
+  #module-switch{overflow-x:auto;max-width:100%}
+  .mod-btn{padding:0 10px;font-size:11.5px}
+  .section-card{padding:14px!important}
+}
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="sidebar">
+    <div class="sb-logo">
+      <img class="sb-logo-box" src="data:image/jpeg;base64,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" alt="SBM(U) 2.0 logo" style="object-fit:contain;background:#fff">
+      <div>
+        <div class="sb-logo-text">SBM(U) 2.0</div>
+        <div class="sb-logo-sub">MP — ULB Fin Status</div>
+      </div>
+    </div>
+    <input id="searchBox" class="sb-search" placeholder="Search ULB name...">
+    <div class="sb-section-label">Divisions</div>
+    <div id="divisionNav"></div>
+  </div>
+
+  <div id="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+  <div id="content-area">
+    <div id="topbar">
+      <button id="sidebar-toggle" onclick="toggleSidebar()" aria-label="Toggle menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      <div id="module-switch">
+        <div class="mod-btn active" id="modBtnFin" onclick="switchModule('fin')">Financial Progress</div>
+        <div class="mod-btn" id="modBtnPhy" onclick="switchModule('phy')">Physical Progress</div>
+        <div class="mod-btn" id="modBtnExp" onclick="switchModule('exp')">Expenditure Target</div>
+      </div>
+      <div id="sync-status" style="margin-left:16px">Loading...</div>
+      <button id="refresh-btn" onclick="loadData()">Refresh</button>
+      <div class="tb-badge" id="ulbCountBadge">— ULBs</div>
+    </div>
+
+    <div id="top-tabs"></div>
+
+    <div id="main">
+    <div id="page-fin">
+      <span id="componentTitle" style="display:none"></span>
+
+      <div class="section-card">
+        <div class="section-card-title">Financial Outlay — Projects Approved by GoI</div>
+        <div class="outlay-grid" style="display:grid;gap:14px;margin-bottom:14px">
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div class="kpi-card" style="border-left-color:var(--navy)">
+              <div class="kpi-label">GoI</div>
+              <div class="kpi-value">₹2036.61 Cr</div>
+            </div>
+            <div class="kpi-card" style="border-left-color:var(--navy)">
+              <div class="kpi-label">GoMP</div>
+              <div class="kpi-value">₹1644.37 Cr</div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div class="kpi-card" style="border-left-color:var(--navy)">
+              <div class="kpi-label">ULB Share</div>
+              <div class="kpi-value">₹651.30 Cr</div>
+            </div>
+            <div class="kpi-card" style="border-left-color:var(--navy)">
+              <div class="kpi-label">Total</div>
+              <div class="kpi-value">₹4332.28 Cr</div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div class="kpi-card" style="border-left-color:#38bdf8;background:#f0f9ff">
+              <div class="kpi-label">Grant Received</div>
+              <div class="kpi-value" id="outlayGrantReceived">₹157.77 Cr</div>
+            </div>
+            <div class="kpi-card" style="border-left-color:#38bdf8;background:#f0f9ff">
+              <div style="display:flex;justify-content:space-between;gap:10px">
+                <div>
+                  <div class="kpi-label">Exp</div>
+                  <div class="kpi-value" id="outlayExp">₹80.46 Cr</div>
+                </div>
+                <div style="text-align:right">
+                  <div class="kpi-label">% of Exp</div>
+                  <div class="kpi-value" id="outlayPctExp">51%</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="table-scroll" style="margin-top:18px">
+          <table class="fin-table" id="outlayTable">
+            <thead>
+              <tr>
+                <th rowspan="2" style="text-align:left;vertical-align:bottom">Component</th>
+                <th colspan="4" style="text-align:center;border-left:1px solid var(--gray200)">Projects Approved by GoI</th>
+                <th colspan="3" style="text-align:center;border-left:1px solid var(--gray200);background:#f0f9ff;color:#0369a1">Utilization</th>
+              </tr>
+              <tr>
+                <th style="border-left:1px solid var(--gray200)">GoI</th><th>GoMP</th><th>ULB Share</th><th>Total</th>
+                <th style="border-left:1px solid var(--gray200);background:#f0f9ff;color:#0369a1">Grant Received</th>
+                <th style="background:#f0f9ff;color:#0369a1">Exp</th>
+                <th style="background:#f0f9ff;color:#0369a1">% of Exp</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Solid Waste Management</td>
+                <td>436.10</td><td>397.09</td><td>342.10</td><td>1175.29</td>
+                <td id="outlaySWM_E">₹50.48 Cr</td><td id="outlaySWM_J">₹29.41 Cr</td><td id="outlaySWM_N">58%</td>
+              </tr>
+              <tr>
+                <td>Used Water Management</td>
+                <td>1232.26</td><td>983.60</td><td>245.90</td><td>2461.76</td>
+                <td id="outlayUWM_E">₹77.77 Cr</td><td id="outlayUWM_J">₹30.01 Cr</td><td id="outlayUWM_N">39%</td>
+              </tr>
+              <tr>
+                <td>Toilet</td>
+                <td>79.75</td><td>71.35</td><td>63.30</td><td>214.40</td>
+                <td id="outlayToilet_E">₹0.00 Cr</td><td id="outlayToilet_J">₹5.59 Cr</td><td id="outlayToilet_N">—</td>
+              </tr>
+              <tr>
+                <td>IEC</td>
+                <td>192.00</td><td>128.00</td><td>0.00</td><td>320.00</td>
+                <td id="outlayIEC_E">₹18.67 Cr</td><td id="outlayIEC_J">₹12.95 Cr</td><td id="outlayIEC_N">69%</td>
+              </tr>
+              <tr>
+                <td>Capacity Building</td>
+                <td>96.50</td><td>64.33</td><td>0.00</td><td>160.83</td>
+                <td id="outlayCB_E">₹10.85 Cr</td><td id="outlayCB_J">₹2.50 Cr</td><td id="outlayCB_N">23%</td>
+              </tr>
+              <tr class="total-row">
+                <td>Total</td>
+                <td>2036.61</td><td>1644.37</td><td>651.30</td><td>4332.28</td>
+                <td id="outlayTotalRow_E">₹157.77 Cr</td><td id="outlayTotalRow_J">₹80.46 Cr</td><td id="outlayTotalRow_N">51%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <hr style="border:none;border-top:1px solid var(--gray200);margin:28px 0">
+
+      <div class="kpi-grid" id="kpiGrid" style="grid-template-columns:repeat(4,minmax(0,1fr))"></div>
+
+      <div class="section-card">
+        <div class="section-card-title">Division Utilization Heatmap (% Utilized by Component)</div>
+        <div id="heatmapContainer" style="overflow-x:auto"></div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-card-title">
+          <span id="tableTitle">ULB-wise Detail</span>
+          <span style="font-weight:400;font-size:12px;color:var(--gray400)" id="tableRowCount"></span>
+        </div>
+        <div style="display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap">
+          <select id="divisionDropdown" style="padding:8px 12px;border:1px solid var(--gray200);border-radius:7px;font-size:13px;font-family:'DM Sans',sans-serif;color:var(--gray700);background:#fff;min-width:180px"></select>
+          <input id="tableSearch" placeholder="Search ULB name..." style="flex:1;min-width:200px;padding:8px 12px;border:1px solid var(--gray200);border-radius:7px;font-size:13px;font-family:'DM Sans',sans-serif;color:var(--gray700)">
+        </div>
+        <div class="table-scroll">
+          <table class="fin-table">
+            <thead>
+              <tr>
+                <th>ULB Name</th><th>District</th><th>Division</th>
+                <th>Fund Released</th><th>Expenditure</th><th>Unspent</th><th>% Util</th>
+              </tr>
+            </thead>
+            <tbody id="mainTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    </div><!-- /page-fin -->
+
+    <div id="page-phy" style="display:none"></div>
+
+    <div id="page-exp" style="display:none">
+      <div id="expWarningBanner" style="display:none;background:#fff7ed;border:1px solid #fdba74;color:#9a3412;padding:10px 14px;border-radius:8px;font-size:13px;margin-bottom:14px"></div>
+      <span id="expComponentTitle" style="display:none"></span>
+
+      <div class="kpi-grid" id="expKpiGrid" style="grid-template-columns:repeat(5,minmax(0,1fr))"></div>
+
+      <div class="section-card">
+        <div class="section-card-title">Division Achievement Heatmap (Actual vs Target %)</div>
+        <div id="expHeatmapContainer" style="overflow-x:auto"></div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-card-title">
+          <span id="expTableTitle">ULB-wise Detail</span>
+          <span style="font-weight:400;font-size:12px;color:var(--gray400)" id="expTableRowCount"></span>
+        </div>
+        <div style="display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap">
+          <select id="expDivisionDropdown" style="padding:8px 12px;border:1px solid var(--gray200);border-radius:7px;font-size:13px;font-family:'DM Sans',sans-serif;color:var(--gray700);background:#fff;min-width:180px"></select>
+          <input id="expTableSearch" placeholder="Search ULB name..." style="flex:1;min-width:200px;padding:8px 12px;border:1px solid var(--gray200);border-radius:7px;font-size:13px;font-family:'DM Sans',sans-serif;color:var(--gray700)">
+        </div>
+        <div class="table-scroll">
+          <table class="fin-table">
+            <thead>
+              <tr>
+                <th>ULB Name</th><th>District</th><th>Division</th>
+                <th>Cumulative Target</th><th>Cumulative Actual</th>
+                <th class="sortable-th" onclick="setExpSort('qT')">Q1 Target</th><th class="sortable-th" onclick="setExpSort('qA')">Q1 Actual</th>
+                <th class="sortable-th" onclick="setExpSort('q2T')">Q2 Target</th><th class="sortable-th" onclick="setExpSort('q2A')">Q2 Actual</th><th>Q3 Actual</th><th>Q4 Actual</th>
+                <th>Total Actual</th><th>% Achieved</th>
+              </tr>
+            </thead>
+            <tbody id="expMainTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div><!-- /page-exp -->
+    </div>
+  </div>
+</div>
+
+<script>
+// ── CONFIG ──
+// Reads live, directly from a public Google Sheet - no server, no VPN,
+// no login of any kind. Works for anyone who opens this file, as long
+// as the sheet stays shared as "Anyone with the link can view".
+const SHEET_ID = "1LZtwJUmblDYe-YM40epBqyRTUwnr4b2Y_MsETU1XQWA";
+// Main data tab — the sheet containing Division/District/ULB Name/Component columns.
+const MAIN_SHEET_NAME = "OverAll_FinStatusRp";
+// Second tab in the SAME workbook — no extra fetch needed, just another sheet in the file already loaded.
+const EXP_SHEET_NAME = "Expdt(Tgt-Actuals)";
+// Tab with the state-level Grant Received / Exp / % of Exp summary by component.
+const MS_SHEET_NAME = "MS";
+
+// Column mapping (0-indexed), confirmed from source headers:
+// 0 Sr, 1 Division, 2 District, 3 ULB Name, 4 ULB Code, 5 LGD Code, 6 IA's Cd, 7 Sharing Pattern
+// Then 6 blocks of 7 cols each: Overall(8), SWM(15), UWM(22), Toilet(29), CB(36), IEC(43)
+// Each block: 0 Project Cost, 1 ULB Share, 2 GOI/GoMP Share, 3 CC Rlsd, 4 Utilization, 5 Unspent, 6 Balance
+const COMPONENTS = [
+  { key: "overall", label: "Overall", startCol: 8 },
+  { key: "swm",     label: "SWM (406)", startCol: 15 },
+  { key: "uwm",     label: "UWM (435)", startCol: 22 },
+  { key: "toilet",  label: "Toilet (436)", startCol: 29 },
+  { key: "cb",      label: "CB (437)", startCol: 36 },
+  { key: "iec",     label: "IEC (438)", startCol: 43 },
+];
+
+// Expdt(Tgt-Actuals) sheet — no "Overall" block in source, so we compute it by summing the 5 components.
+// Each block: 0 Cumulative Target (Inception-FY26), 1 Cumulative Actual, 2 Q1 FY27 Target, 3 Q1 FY27 Actual,
+//             4 Q2 FY27 Actual, 5 Q3 FY27 Actual, 6 Q4 FY27 Actual  (Q2-Q4 have no per-ULB target in this sheet)
+const EXP_COMPONENTS = [
+  { key: "overall", label: "Overall", startCol: null }, // summed across all blocks below
+  { key: "swm",     label: "SWM (406)", startCol: 8 },
+  { key: "uwm",     label: "UWM (435)", startCol: 15 },
+  { key: "toilet",  label: "Toilet (436)", startCol: 22 },
+  { key: "cb",      label: "CB (437)", startCol: 29 },
+  { key: "iec",     label: "IEC (438)", startCol: 36 },
+];
+const EXP_BLOCK_STARTS = [8, 15, 22, 29, 36];
+
+// Q2 FY27 Targets live in separate tabs (not in Expdt(Tgt-Actuals) itself),
+// matched to each ULB by ULB Code (column B in each of these tabs, column E
+// in the Expdt(Tgt-Actuals) sheet). CB and IEC have no Q2 target source yet,
+// left out for now.
+const Q2_TARGET_SOURCES = [
+  { key: "swm",    sheetName: "Q2-Legacy",     codeCol: 1, valueCol: 19 }, // column T
+  { key: "toilet", sheetName: "Q2-IHHI-CTPT",  codeCol: 1, valueCol: 15 }, // column P
+  { key: "uwm",    sheetName: "Q2-UWM",        codeCol: 1, valueCol: 15 }, // column P
+];
+let q2TargetLookup = {}; // { normalizedUlbCode: { swm, uwm, toilet } }
+
+function normCode(v) {
+  return String(v).trim().toUpperCase();
+}
+
+// Fetches one tab of the public Google Sheet as a plain array-of-arrays,
+// matching the shape XLSX.utils.sheet_to_json(sheet, {header:1}) used to
+// give us - so every existing row[i] index below still lines up.
+// headers=0 tells Google not to treat row 1 as a header, so ALL rows
+// (including the sheet's own label/header rows) come back as plain data,
+// exactly like the old XLSX-based reads did.
+async function fetchGvizSheet(sheetName) {
+  const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}&headers=0`;
+  const res = await fetch(url, { cache: "no-store" });
+  if (!res.ok) throw new Error(`HTTP ${res.status} fetching tab "${sheetName}"`);
+  const text = await res.text();
+  const jsonStart = text.indexOf("{");
+  const jsonEnd = text.lastIndexOf("}");
+  if (jsonStart === -1 || jsonEnd === -1) throw new Error(`Unexpected response for tab "${sheetName}"`);
+  const data = JSON.parse(text.slice(jsonStart, jsonEnd + 1));
+  if (data.status === "error" || !data.table) {
+    throw new Error(`Tab "${sheetName}" not found or not accessible`);
+  }
+  const numCols = data.table.cols.length;
+  return data.table.rows.map(r => {
+    const arr = new Array(numCols).fill("");
+    if (r && r.c) {
+      r.c.forEach((cell, i) => {
+        if (cell && cell.v !== null && cell.v !== undefined) arr[i] = cell.v;
+      });
+    }
+    return arr;
+  });
+}
+
+// The MS tab's "% of Expense" column sometimes has literal text like
+// "58%", a raw decimal (0.58), or an error string (#DIV/0!, #REF!).
+// Normalize all of that into either "NN%" or "—" for a bad/missing value.
+function formatPct(raw) {
+  const s = String(raw).trim();
+  if (s === "" || s.startsWith("#")) return "—";
+  if (s.endsWith("%")) return s;
+  const n = parseFloat(s.replace(/,/g, ""));
+  if (isNaN(n)) return "—";
+  return (n <= 1 ? n * 100 : n).toFixed(0) + "%";
+}
+
+// MS tab: state-level Grant Received (col E) / Exp (col J) / % of Exp (col N),
+// one row per component. Matched by keyword in column A rather than row
+// position, since blank rows above/below the data block can shift things.
+function buildOutlayFromMS(msRows) {
+  const find = (keyword) => msRows.find(r => {
+    const label = String(r[0]).trim().toLowerCase();
+    return label.includes(keyword);
+  });
+  const totalRow = msRows.find(r => String(r[0]).trim().toLowerCase() === "total");
+
+  const setCell = (idPrefix, row) => {
+    const eEl = document.getElementById(idPrefix + "_E");
+    const jEl = document.getElementById(idPrefix + "_J");
+    const nEl = document.getElementById(idPrefix + "_N");
+    if (!row) { if (eEl) eEl.textContent = "—"; if (jEl) jEl.textContent = "—"; if (nEl) nEl.textContent = "—"; return; }
+    if (eEl) eEl.textContent = "₹" + parseNum(row[4]).toFixed(2) + " Cr";
+    if (jEl) jEl.textContent = "₹" + parseNum(row[9]).toFixed(2) + " Cr";
+    if (nEl) nEl.textContent = formatPct(row[13]);
+  };
+
+  setCell("outlaySWM", find("swm"));
+  setCell("outlayUWM", find("uwm"));
+  setCell("outlayToilet", find("toilet"));
+  setCell("outlayIEC", find("iec"));
+  setCell("outlayCB", find("cb"));
+  setCell("outlayTotalRow", totalRow);
+
+  if (totalRow) {
+    document.getElementById("outlayGrantReceived").textContent = "₹" + parseNum(totalRow[4]).toFixed(2) + " Cr";
+    document.getElementById("outlayExp").textContent = "₹" + parseNum(totalRow[9]).toFixed(2) + " Cr";
+    document.getElementById("outlayPctExp").textContent = formatPct(totalRow[13]);
+  }
+}
+
+let allRows = [];      // parsed ULB rows (excluding State total row)
+let stateRow = null;   // the aggregate "State" row
+let currentComponent = "overall";
+let currentDivision = "ALL";
+let searchTerm = "";
+
+let expAllRows = [];       // parsed ULB rows from Expdt(Tgt-Actuals)
+let expStateRow = null;
+let currentExpComponent = "overall";
+let currentModule = "fin"; // 'fin' | 'exp'
+
+function parseNum(v) {
+  if (v === null || v === undefined) return 0;
+  let s = String(v).trim();
+  if (s === "" || s === "-") return 0;
+  let neg = false;
+  if (s.startsWith("(") && s.endsWith(")")) { neg = true; s = s.slice(1, -1); }
+  s = s.replace(/,/g, "").trim();
+  let n = parseFloat(s);
+  if (isNaN(n)) return 0;
+  return neg ? -n : n;
+}
+
+function fmt(n) {
+  if (n === 0) return "—";
+  return n.toLocaleString("en-IN", { maximumFractionDigits: 2, minimumFractionDigits: 2 });
+}
+
+function pctClass(p) {
+  if (p >= 75) return "pct-hi";
+  if (p >= 40) return "pct-mid";
+  return "pct-lo";
+}
+
+
+async function loadData() {
+  const statusEl = document.getElementById("sync-status");
+  statusEl.textContent = "Loading...";
+  try {
+    // Fetch every tab we need in parallel, straight from Google Sheets.
+    const [mainRows, expRows] = await Promise.all([
+      fetchGvizSheet(MAIN_SHEET_NAME),
+      fetchGvizSheet(EXP_SHEET_NAME),
+    ]);
+
+    // rows[0] = group header, rows[1] = column header, rows[2:] = data
+    // We identify real ULB rows using column D (ULB Name) rather than
+    // trusting any particular label in column B for a "total" row - a
+    // genuine ULB row has an actual place name in column D; any kind of
+    // rollup/subtotal row typically has "Total" (or is blank) there
+    // instead. This way KPI totals are always computed by summing the
+    // real ULB rows ourselves, regardless of how the source labels its
+    // own aggregate rows.
+    const isAggregateRow = (r) => {
+      const name = String(r[3]).trim().toLowerCase();
+      return name === "" || name.includes("total") || name === "state" || name === "grand total";
+    };
+    const data = mainRows.slice(2).filter(r => r[3] && String(r[3]).trim() !== "");
+
+    // ── Fix for merged Division cells ──
+    // If the sheet has the Division name merged vertically across several
+    // ULB rows, every row after the first in that block comes back with
+    // r[1] = "" (empty string). We forward-fill: if column B is blank for
+    // a row, reuse the last non-blank Division value seen above it.
+    let lastDivision = "";
+    data.forEach(r => {
+      const raw = String(r[1]).trim();
+      if (raw === "") {
+        r[1] = lastDivision;
+      } else {
+        lastDivision = raw;
+      }
+    });
+
+    // ── Debug: flag rows where Division ends up purely numeric ──
+    // A genuine division name should never be just digits. If we still see
+    // a pure number after the merged-cell fix above, something else is off
+    // (wrong column, shifted row, bad source data) — log the FULL raw row
+    // so we can see every column (Sr, Division, District, ULB Name, ULB
+    // Code, LGD Code, IA's Cd, Sharing Pattern...) and pinpoint the cause.
+    data.forEach((r, i) => {
+      const divVal = String(r[1]).trim();
+      if (divVal !== "" && /^\d+$/.test(divVal)) {
+        console.warn(`⚠ Numeric Division value "${divVal}" found for ULB "${r[3]}" (row index ${i}). Full row:`, r);
+      }
+    });
+
+    stateRow = null; // no longer used - totals are computed by summing allRows directly
+    allRows = data.filter(r => !isAggregateRow(r));
+
+    // ── Second tab: Expdt(Tgt-Actuals) ──
+    // header rows 0-3 (group / period / quarter / column labels), data from row 4
+    const expData = expRows.slice(4).filter(r => r[3] && String(r[3]).trim() !== "");
+    expStateRow = null; // no longer used - totals are computed by summing expAllRows directly
+    expAllRows = expData.filter(r => !isAggregateRow(r));
+    const banner = document.getElementById("expWarningBanner");
+    if (expAllRows.length === 0) {
+      banner.style.display = "";
+      banner.textContent = "⚠ Found the '" + EXP_SHEET_NAME + "' tab, but no ULB data rows were read from it (0 rows). Check that data starts on row 5 and column D has ULB names.";
+    } else {
+      banner.style.display = "none";
+    }
+
+    // ── Q2 FY27 Targets: pulled from three separate tabs, matched by ULB Code ──
+    q2TargetLookup = {};
+    await Promise.all(Q2_TARGET_SOURCES.map(async (src) => {
+      let sheetRows;
+      try {
+        sheetRows = await fetchGvizSheet(src.sheetName);
+      } catch (e) {
+        console.warn("Q2 target tab '" + src.sheetName + "' not found or unreadable:", e.message);
+        return;
+      }
+      sheetRows.forEach(r => {
+        const code = normCode(r[src.codeCol]);
+        if (!code) return;
+        const val = parseNum(r[src.valueCol]);
+        if (!q2TargetLookup[code]) q2TargetLookup[code] = { swm: 0, uwm: 0, toilet: 0 };
+        q2TargetLookup[code][src.key] = val;
+      });
+    }));
+
+    // ── MS tab: state-level Grant Received / Exp / % of Exp by component ──
+    try {
+      const msRows = await fetchGvizSheet(MS_SHEET_NAME);
+      buildOutlayFromMS(msRows);
+    } catch (e) {
+      console.warn("MS tab not found or unreadable:", e.message);
+    }
+
+    statusEl.style.color = "";
+    statusEl.textContent = "Last updated: " + new Date().toLocaleString();
+    document.getElementById("ulbCountBadge").textContent = allRows.length + " ULBs";
+
+    buildDivisionNav();
+    syncTableControls();
+    buildTopTabs();
+    buildHeatmap();
+    buildExpTopTabs();
+    buildExpHeatmap();
+    if (currentModule === "fin") render(); else renderExp();
+  } catch (err) {
+    statusEl.textContent = "Error loading data: " + err.message;
+    statusEl.style.color = "#dc2626";
+  }
+}
+
+function getDivisions() {
+  const set = new Set();
+  const EXCLUDE = ["division", "state"];
+  allRows.forEach(r => {
+    if (r[1] && !EXCLUDE.includes(String(r[1]).trim().toLowerCase())) {
+      set.add(String(r[1]).trim());
+    }
+  });
+  return Array.from(set).sort();
+}
+
+function buildDivisionNav() {
+  const nav = document.getElementById("divisionNav");
+  const divisions = getDivisions();
+  let html = `<div class="sb-nav-item ${currentDivision === 'ALL' ? 'active' : ''}" onclick="setDivision('ALL')">
+    <span>All Divisions</span><span class="sb-nav-count">${allRows.length}</span></div>`;
+  divisions.forEach(d => {
+    const count = allRows.filter(r => String(r[1]).trim() === d).length;
+    html += `<div class="sb-nav-item ${currentDivision === d ? 'active' : ''}" onclick="setDivision('${d}')">
+      <span>${d}</span><span class="sb-nav-count">${count}</span></div>`;
+  });
+  nav.innerHTML = html;
+}
+
+function buildTopTabs() {
+  const tabs = document.getElementById("top-tabs");
+  tabs.innerHTML = COMPONENTS.map(c =>
+    `<div class="top-tab ${currentComponent === c.key ? 'active' : ''}" onclick="setComponent('${c.key}')">${c.label}</div>`
+  ).join("");
+}
+
+function toggleSidebar() {
+  document.getElementById("sidebar").classList.toggle("open");
+}
+
+function setDivision(d) {
+  currentDivision = d;
+  buildDivisionNav();
+  syncTableControls();
+  if (currentModule === "fin") render(); else renderExp();
+  if (window.innerWidth <= 900) document.getElementById("sidebar").classList.remove("open");
+}
+
+function syncTableControls() {
+  const dd = document.getElementById("divisionDropdown");
+  const divisions = getDivisions();
+  dd.innerHTML = `<option value="ALL">All Divisions</option>` +
+    divisions.map(d => `<option value="${d}" ${currentDivision === d ? "selected" : ""}>${d}</option>`).join("");
+  if (currentDivision === "ALL") dd.value = "ALL";
+  document.getElementById("tableSearch").value = searchTerm;
+
+  const edd = document.getElementById("expDivisionDropdown");
+  edd.innerHTML = `<option value="ALL">All Divisions</option>` +
+    divisions.map(d => `<option value="${d}" ${currentDivision === d ? "selected" : ""}>${d}</option>`).join("");
+  if (currentDivision === "ALL") edd.value = "ALL";
+  document.getElementById("expTableSearch").value = searchTerm;
+}
+
+document.getElementById("divisionDropdown").addEventListener("change", (e) => {
+  currentDivision = e.target.value;
+  buildDivisionNav();
+  render();
+});
+
+document.getElementById("expDivisionDropdown").addEventListener("change", (e) => {
+  currentDivision = e.target.value;
+  buildDivisionNav();
+  renderExp();
+});
+
+document.getElementById("tableSearch").addEventListener("input", (e) => {
+  searchTerm = e.target.value.trim().toLowerCase();
+  document.getElementById("searchBox").value = e.target.value;
+  document.getElementById("expTableSearch").value = e.target.value;
+  render();
+});
+
+document.getElementById("expTableSearch").addEventListener("input", (e) => {
+  searchTerm = e.target.value.trim().toLowerCase();
+  document.getElementById("searchBox").value = e.target.value;
+  document.getElementById("tableSearch").value = e.target.value;
+  renderExp();
+});
+
+function setComponent(key) {
+  currentComponent = key;
+  buildTopTabs();
+  render();
+}
+
+function setExpComponent(key) {
+  currentExpComponent = key;
+  buildExpTopTabs();
+  renderExp();
+}
+
+function switchModule(mod) {
+  currentModule = mod;
+  document.getElementById("page-fin").style.display = mod === "fin" ? "" : "none";
+  document.getElementById("page-phy").style.display = mod === "phy" ? "" : "none";
+  document.getElementById("page-exp").style.display = mod === "exp" ? "" : "none";
+  document.getElementById("modBtnFin").classList.toggle("active", mod === "fin");
+  document.getElementById("modBtnPhy").classList.toggle("active", mod === "phy");
+  document.getElementById("modBtnExp").classList.toggle("active", mod === "exp");
+  document.getElementById("top-tabs").style.display = mod === "phy" ? "none" : "";
+  if (mod === "fin") { buildTopTabs(); render(); }
+  else if (mod === "exp") { buildExpTopTabs(); renderExp(); }
+}
+
+document.getElementById("searchBox").addEventListener("input", (e) => {
+  searchTerm = e.target.value.trim().toLowerCase();
+  document.getElementById("tableSearch").value = e.target.value;
+  document.getElementById("expTableSearch").value = e.target.value;
+  if (currentModule === "fin") render(); else renderExp();
+});
+
+function getFilteredRows() {
+  return allRows.filter(r => {
+    const divMatch = currentDivision === "ALL" || String(r[1]).trim() === currentDivision;
+    const searchMatch = !searchTerm || String(r[3]).toLowerCase().includes(searchTerm);
+    return divMatch && searchMatch;
+  });
+}
+
+function getFilteredExpRows() {
+  return expAllRows.filter(r => {
+    const divMatch = currentDivision === "ALL" || String(r[1]).trim() === currentDivision;
+    const searchMatch = !searchTerm || String(r[3]).toLowerCase().includes(searchTerm);
+    return divMatch && searchMatch;
+  });
+}
+
+function sumComponent(rows, startCol) {
+  const totals = [0,0,0,0,0,0,0];
+  rows.forEach(r => {
+    for (let i = 0; i < 7; i++) totals[i] += parseNum(r[startCol + i]);
+  });
+  return totals;
+}
+
+// [0]CumTarget [1]CumActual [2]Q1Target [3]Q1Actual [4]Q2Target [5]Q2Actual [6]Q3Actual [7]Q4Actual
+function expRowValues(r, comp) {
+  let raw; // source values: [cumT, cumA, q1T, q1A, q2A, q3A, q4A] (7 values, no Q2 target in source)
+  if (comp.startCol !== null) {
+    raw = [0,1,2,3,4,5,6].map(i => parseNum(r[comp.startCol + i]));
+  } else {
+    raw = [0,0,0,0,0,0,0];
+    EXP_BLOCK_STARTS.forEach(sc => {
+      for (let i = 0; i < 7; i++) raw[i] += parseNum(r[sc + i]);
+    });
+  }
+
+  // ULB Code is column E (index 4) in Expdt(Tgt-Actuals), same layout as
+  // the main Financial Status sheet's leading columns.
+  const code = normCode(r[4]);
+  const q2t = q2TargetLookup[code];
+  let q2Target = 0;
+  if (comp.key === "swm") q2Target = q2t ? q2t.swm : 0;
+  else if (comp.key === "uwm") q2Target = q2t ? q2t.uwm : 0;
+  else if (comp.key === "toilet") q2Target = q2t ? q2t.toilet : 0;
+  else if (comp.key === "overall") q2Target = q2t ? (q2t.swm + q2t.uwm + q2t.toilet) : 0;
+  // cb / iec: no Q2 target source yet, left at 0
+
+  return [raw[0], raw[1], raw[2], raw[3], q2Target, raw[4], raw[5], raw[6]];
+}
+
+function sumExpComponent(rows, comp) {
+  const totals = [0,0,0,0,0,0,0,0];
+  rows.forEach(r => {
+    const v = expRowValues(r, comp);
+    for (let i = 0; i < 8; i++) totals[i] += v[i];
+  });
+  return totals;
+}
+
+function pctToColor(pct) {
+  const p = Math.max(0, Math.min(100, pct));
+  // red (low) -> amber (mid) -> green (high)
+  let r, g, b;
+  if (p < 50) {
+    const t = p / 50;
+    r = Math.round(220 + (245 - 220) * t);
+    g = Math.round(38 + (158 - 38) * t);
+    b = Math.round(38 + (11 - 38) * t);
+  } else {
+    const t = (p - 50) / 50;
+    r = Math.round(245 + (22 - 245) * t);
+    g = Math.round(158 + (163 - 158) * t);
+    b = Math.round(11 + (74 - 11) * t);
+  }
+  return `rgb(${r},${g},${b})`;
+}
+
+function buildHeatmap() {
+  const divisions = getDivisions();
+  let html = `<table class="heat-table"><thead><tr><th>Division</th>`;
+  COMPONENTS.forEach(c => html += `<th>${c.label}</th>`);
+  html += `</tr></thead><tbody>`;
+  divisions.forEach(d => {
+    const rows = allRows.filter(r => String(r[1]).trim() === d);
+    html += `<tr><td class="heat-label">${d}</td>`;
+    COMPONENTS.forEach(c => {
+      const [, , , rlsd, ut] = sumComponent(rows, c.startCol);
+      const pct = rlsd > 0 ? (ut / rlsd * 100) : 0;
+      const color = pctToColor(pct);
+      html += `<td><div class="heat-cell" style="background:${color}" onclick="setDivision('${d}');setComponent('${c.key}')" title="${d} — ${c.label}: ${pct.toFixed(1)}% utilized">${rlsd > 0 ? pct.toFixed(0) + "%" : "—"}</div></td>`;
+    });
+    html += `</tr>`;
+  });
+  html += `</tbody></table>
+    <div class="heat-legend"><span>0%</span><div class="heat-legend-bar"></div><span>100% utilized</span></div>`;
+  document.getElementById("heatmapContainer").innerHTML = html;
+}
+
+function render() {
+  const comp = COMPONENTS.find(c => c.key === currentComponent);
+  document.getElementById("componentTitle").textContent = comp.label + " Financial Status";
+  document.getElementById("tableTitle").textContent = comp.label + " — ULB-wise Detail";
+
+  const filtered = getFilteredRows();
+  document.getElementById("tableRowCount").textContent = filtered.length + " rows";
+
+  // KPI cards - always computed by summing the real ULB rows ourselves
+  const totals = sumComponent(filtered, comp.startCol);
+  const [projCost, ulbShare, goiShare, ccRlsd, util, unspent, balance] = totals;
+  const utilPct = ccRlsd > 0 ? (util / ccRlsd * 100) : 0;
+
+  document.getElementById("kpiGrid").innerHTML = `
+    <div class="kpi-card" style="border-left-color:var(--blue)">
+      <div class="kpi-label">Fund Released</div>
+      <div class="kpi-value">₹${fmt(ccRlsd)} L</div>
+    </div>
+    <div class="kpi-card" style="border-left-color:var(--green)">
+      <div class="kpi-label">Expenditure</div>
+      <div class="kpi-value">₹${fmt(util)} L</div>
+      <div class="kpi-sub ${pctClass(utilPct)}">${utilPct.toFixed(1)}% of released</div>
+    </div>
+    <div class="kpi-card" style="border-left-color:var(--amber)">
+      <div class="kpi-label">Unspent</div>
+      <div class="kpi-value">₹${fmt(unspent)} L</div>
+    </div>
+    <div class="kpi-card" style="border-left-color:var(--red)">
+      <div class="kpi-label">Balance (Yet to be Rlsd)</div>
+      <div class="kpi-value">₹${fmt(balance)} L</div>
+    </div>
+  `;
+
+  // Main table - sorted by % Utilized ascending (least utilized ULBs first)
+  const startCol = comp.startCol;
+  const withPct = filtered.map(r => {
+    const [rlsd, ut, unsp] = [3, 4, 5].map(i => parseNum(r[startCol + i]));
+    const pct = rlsd > 0 ? (ut / rlsd * 100) : 0;
+    return { r, rlsd, ut, unsp, pct };
+  });
+  withPct.sort((a, b) => a.pct - b.pct);
+
+  let rowsHtml = "";
+  withPct.forEach(({ r, rlsd, ut, unsp, pct }) => {
+    rowsHtml += `<tr>
+      <td>${r[3] || ""}</td>
+      <td>${r[2] || ""}</td>
+      <td>${r[1] || ""}</td>
+      <td>${fmt(rlsd)}</td>
+      <td>${fmt(ut)}</td>
+      <td>${fmt(unsp)}</td>
+      <td class="${pctClass(pct)}">${rlsd > 0 ? pct.toFixed(1) + "%" : "—"}</td>
+    </tr>`;
+  });
+
+  // total row for filtered set
+  const [, , , tRlsd, tUt, tUnsp] = sumComponent(filtered, startCol);
+  const tPct = tRlsd > 0 ? (tUt / tRlsd * 100) : 0;
+  rowsHtml += `<tr class="total-row">
+    <td>TOTAL</td><td></td><td></td>
+    <td>${fmt(tRlsd)}</td><td>${fmt(tUt)}</td><td>${fmt(tUnsp)}</td>
+    <td class="${pctClass(tPct)}">${tRlsd > 0 ? tPct.toFixed(1) + "%" : "—"}</td>
+  </tr>`;
+
+  document.getElementById("mainTableBody").innerHTML = rowsHtml;
+}
+
+function buildExpTopTabs() {
+  const tabs = document.getElementById("top-tabs");
+  if (currentModule !== "exp") return; // fin module owns #top-tabs when active
+  tabs.innerHTML = EXP_COMPONENTS.map(c =>
+    `<div class="top-tab ${currentExpComponent === c.key ? 'active' : ''}" onclick="setExpComponent('${c.key}')">${c.label}</div>`
+  ).join("");
+}
+
+function buildExpHeatmap() {
+  const divisions = getDivisions();
+  let html = `<table class="heat-table"><thead><tr><th>Division</th>`;
+  EXP_COMPONENTS.forEach(c => html += `<th>${c.label}</th>`);
+  html += `</tr></thead><tbody>`;
+  divisions.forEach(d => {
+    const rows = expAllRows.filter(r => String(r[1]).trim() === d);
+    html += `<tr><td class="heat-label">${d}</td>`;
+    EXP_COMPONENTS.forEach(c => {
+      const [cumT, cumA, q1T, q1A] = sumExpComponent(rows, c);
+      const target = cumT + q1T, actual = cumA + q1A;
+      const pct = target > 0 ? (actual / target * 100) : 0;
+      const color = pctToColor(pct);
+      html += `<td><div class="heat-cell" style="background:${color}" onclick="setDivision('${d}');switchModule('exp');setExpComponent('${c.key}')" title="${d} — ${c.label}: ${pct.toFixed(1)}% achieved">${target > 0 ? pct.toFixed(0) + "%" : "—"}</div></td>`;
+    });
+    html += `</tr>`;
+  });
+  html += `</tbody></table>
+    <div class="heat-legend"><span>0%</span><div class="heat-legend-bar"></div><span>100% achieved</span></div>`;
+  document.getElementById("expHeatmapContainer").innerHTML = html;
+}
+
+let expSortKey = null;   // null = default (sort by % Achieved); or one of 'qT','qA','q2T','q2A'
+let expSortDir = 1;      // 1 = ascending, -1 = descending
+
+function setExpSort(key) {
+  if (expSortKey === key) { expSortDir *= -1; }
+  else { expSortKey = key; expSortDir = 1; }
+  renderExp();
+}
+
+function renderExp() {
+  const comp = EXP_COMPONENTS.find(c => c.key === currentExpComponent);
+  document.getElementById("expComponentTitle").textContent = comp.label + " — Target vs Actuals";
+  document.getElementById("expTableTitle").textContent = comp.label + " — ULB-wise Detail";
+
+  const filtered = getFilteredExpRows();
+  document.getElementById("expTableRowCount").textContent = filtered.length + " rows";
+
+  // KPI cards - always computed by summing the real ULB rows ourselves
+  const totals = sumExpComponent(filtered, comp);
+  const [cumTarget, cumActual, q1Target, q1Actual, q2Target, q2Actual, q3Actual, q4Actual] = totals;
+  const totalTarget = cumTarget + q1Target;
+  const totalActualToDate = cumActual + q1Actual + q2Actual + q3Actual + q4Actual;
+  const achievedPct = totalTarget > 0 ? ((cumActual + q1Actual) / totalTarget * 100) : 0;
+  const q2Pct = q2Target > 0 ? (q2Actual / q2Target * 100) : 0;
+
+  document.getElementById("expKpiGrid").innerHTML = `
+    <div class="kpi-card" style="border-left-color:var(--navy)">
+      <div class="kpi-label">Cumulative Target (to FY26)</div>
+      <div class="kpi-value">₹${fmt(cumTarget)} L</div>
+      <div class="kpi-sub">Actual: ₹${fmt(cumActual)} L</div>
+    </div>
+    <div class="kpi-card" style="border-left-color:var(--blue)">
+      <div class="kpi-label">Q1 FY27 Target</div>
+      <div class="kpi-value">₹${fmt(q1Target)} L</div>
+      <div class="kpi-sub">Actual: ₹${fmt(q1Actual)} L</div>
+    </div>
+    <div class="kpi-card" style="border-left-color:var(--purple, #7c3aed)">
+      <div class="kpi-label">Q2 FY27 Target</div>
+      <div class="kpi-value">₹${fmt(q2Target)} L</div>
+      <div class="kpi-sub ${q2Target > 0 ? pctClass(q2Pct) : ''}">${q2Target > 0 ? "Actual: ₹" + fmt(q2Actual) + " L (" + q2Pct.toFixed(1) + "%)" : "Actual: ₹" + fmt(q2Actual) + " L"}</div>
+    </div>
+    <div class="kpi-card" style="border-left-color:var(--green)">
+      <div class="kpi-label">% Achieved (Cum + Q1)</div>
+      <div class="kpi-value ${pctClass(achievedPct)}">${totalTarget > 0 ? achievedPct.toFixed(1) + "%" : "—"}</div>
+    </div>
+    <div class="kpi-card" style="border-left-color:var(--amber)">
+      <div class="kpi-label">Q2+Q3+Q4 Actuals So Far</div>
+      <div class="kpi-value">₹${fmt(q2Actual + q3Actual + q4Actual)} L</div>
+      <div class="kpi-sub">Total FY27 actual to date: ₹${fmt(totalActualToDate)} L</div>
+    </div>
+  `;
+
+  // Main table - sorted by % Achieved ascending (most behind first) unless a column header was clicked
+  const withPct = filtered.map(r => {
+    const v = expRowValues(r, comp);
+    const [cT, cA, qT, qA, q2T, q2A, q3A, q4A] = v;
+    const target = cT + qT, actualToDate = cA + qA + q2A + q3A + q4A;
+    const pct = target > 0 ? ((cA + qA) / target * 100) : 0;
+    return { r, cT, cA, qT, qA, q2T, q2A, q3A, q4A, actualToDate, pct };
+  });
+  if (expSortKey) {
+    withPct.sort((a, b) => (a[expSortKey] - b[expSortKey]) * expSortDir);
+  } else {
+    withPct.sort((a, b) => a.pct - b.pct);
+  }
+
+  let rowsHtml = "";
+  withPct.forEach(({ r, cT, cA, qT, qA, q2T, q2A, q3A, q4A, actualToDate, pct }) => {
+    rowsHtml += `<tr>
+      <td>${r[3] || ""}</td>
+      <td>${r[2] || ""}</td>
+      <td>${r[1] || ""}</td>
+      <td>${fmt(cT)}</td><td>${fmt(cA)}</td>
+      <td>${fmt(qT)}</td><td>${fmt(qA)}</td>
+      <td>${fmt(q2T)}</td><td>${fmt(q2A)}</td><td>${fmt(q3A)}</td><td>${fmt(q4A)}</td>
+      <td>${fmt(actualToDate)}</td>
+      <td class="${pctClass(pct)}">${(cT + qT) > 0 ? pct.toFixed(1) + "%" : "—"}</td>
+    </tr>`;
+  });
+
+  const [tCumT, tCumA, tQ1T, tQ1A, tQ2T, tQ2A, tQ3A, tQ4A] = sumExpComponent(filtered, comp);
+  const tTarget = tCumT + tQ1T;
+  const tPct = tTarget > 0 ? ((tCumA + tQ1A) / tTarget * 100) : 0;
+  const tActualToDate = tCumA + tQ1A + tQ2A + tQ3A + tQ4A;
+  rowsHtml += `<tr class="total-row">
+    <td>TOTAL</td><td></td><td></td>
+    <td>${fmt(tCumT)}</td><td>${fmt(tCumA)}</td>
+    <td>${fmt(tQ1T)}</td><td>${fmt(tQ1A)}</td>
+    <td>${fmt(tQ2T)}</td><td>${fmt(tQ2A)}</td><td>${fmt(tQ3A)}</td><td>${fmt(tQ4A)}</td>
+    <td>${fmt(tActualToDate)}</td>
+    <td class="${pctClass(tPct)}">${tTarget > 0 ? tPct.toFixed(1) + "%" : "—"}</td>
+  </tr>`;
+
+  document.getElementById("expMainTableBody").innerHTML = rowsHtml;
+}
+
+loadData();
+setInterval(loadData, 60000);
+</script>
+</body>
+</html>
